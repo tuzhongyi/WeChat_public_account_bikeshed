@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>生活垃圾监管平台</title>
+    <link rel="stylesheet" href="../../../assets/howell.font/howell.font.css" />
+    <script src="https://res.wx.qq.com/t/wx_fed/weui.js/res/1.2.17/weui.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="../../../assets/base64.js"></script>
+    <script src="../../../assets/ext.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="container-body">
+        <div class="container-body-content">
+          <div class="container-body-content-items">
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">投放点</div>
+              <div class="container-body-content-item-value" id="station"></div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">社区</div>
+              <div
+                class="container-body-content-item-value"
+                id="community"
+              ></div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">地址</div>
+              <div class="container-body-content-item-value" id="address"></div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">上报时间</div>
+              <div class="container-body-content-item-value" id="time"></div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">滞留时长</div>
+              <div
+                class="container-body-content-item-value"
+                id="duration"
+              ></div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">处置结果</div>
+              <div class="container-body-content-item-value">
+                <select id="result-select" style="display: none">
+                  <option value="1">已处置</option>
+                  <option value="2">误报</option>
+                  <option value="3">管理不规范</option>
+                </select>
+                <span id="result-span" style="display: none"></span>
+              </div>
+            </div>
+            <div class="container-body-content-item">
+              <div class="container-body-content-item-title">备注</div>
+              <div class="container-body-content-item-value">
+                <input type="text" id="description" />
+              </div>
+            </div>
+            <div class="container-body-content-images">
+              <div class="images-head">事件处理照片</div>
+              <div class="images-list">
+                <!-- <div class="img"></div> -->
+                <div class="img-plus">
+                  <i class="howell-icon-plus"></i>
+                </div>
+              </div>
+            </div>
+            <div class="error"></div>
+          </div>
+          <div class="container-body-content-buttons">
+            <div class="handle-details-button">确认</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./dapuqiao_handle_details.ts"></script>
+  </body>
+</html>

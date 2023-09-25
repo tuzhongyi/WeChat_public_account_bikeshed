@@ -1,0 +1,178 @@
+.weui-btn_primary {
+  background-color: #c5dfff;
+  color: #4097ff;
+  border: none;
+  border-radius: 50px;
+}
+
+.weui-btn_primary:not(.weui-btn_disabled):active {
+  background-color: #c5dfff;
+  color: #4097ff;
+  border: none;
+  opacity: 0.8;
+}
+
+.inner-main {
+  width: 100%;
+  height: calc(100% - 40px);
+  position: relative;
+
+}
+
+.inner-main .header {
+  display: table;
+  color: #b2b2b2;
+}
+
+.nav {
+  height: 100%;
+  width: calc(100% - 100px);
+  display: table-cell;
+}
+
+.nav ul {
+  height: 100%;
+  width: 100%;
+
+  display: table;
+}
+
+.nav ul li {
+  text-align: center;
+  display: table-cell;
+}
+
+.inner-main .header .count {
+  width: 100px;
+  height: 100%;
+  display: table-cell;
+  line-height: 40px;
+  text-align: right;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+.tab {
+  top: 3px;
+  position: relative;
+  width: 100%;
+  display: none;
+  min-height: calc(100% + 12px);
+}
+
+.record-item {
+  height: 80px;
+  width: calc(100% - 24px);
+  padding: 12px;
+  background-color: #fff;
+  clear: both;
+}
+
+.record-item .left {
+  float: left;
+}
+
+.record-item .rig {
+  float: right;
+}
+
+.record-item img {
+  width: 140px;
+  height: 80px;
+  border-radius: 10px;
+}
+
+.record-item .content {
+  width: calc(100% - 156px);
+  height: 100%;
+  margin-left: 16px;
+  padding-bottom: 12px;
+  margin-bottom: -12px;
+  border-bottom: 2px solid #eaeaea;
+}
+
+.record-item .content>.title {
+  font-size: 19px;
+  height: 50%;
+  line-height: 40px;
+  vertical-align: middle;
+  overflow: hidden;
+  width: 100%;
+  color: #191919;
+}
+
+.record-item .content .footer {
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+
+}
+
+.record-item .content .footer>.footer-title {
+  font-size: 14.4px;
+  color: #888;
+
+  white-space: nowrap;
+  word-break: break-all;
+  overflow: hidden;
+  /* text-overflow: ellipsis;
+              -o-text-overflow:ellipsis; */
+  width: calc(100% - 48px);
+
+}
+
+.record-item .content .footer>.remark {
+  font-size: 12px;
+  color: #b2b2b2;
+  float: right;
+
+  width: 48px;
+}
+
+.page {
+  overflow: hidden;
+}
+
+
+
+
+
+
+/**pmx**/
+
+html,
+body {
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+}
+
+.main-bar__item.swiper-pagination {
+  pointer-events: initial;
+}
+
+
+
+.list {
+  background-color: #efeff4;
+}
+
+.btn-ok {
+  color: white;
+  background-color: #68aeff;
+  font-size: 18px;
+
+  line-height: 40px;
+  text-align: center;
+  height: 40px;
+  width: 100%;
+  vertical-align: middle;
+  border-radius: 25px;
+  letter-spacing: 3px
+}
+
+#finished .btn-ok {
+  background-color: #52c465;
+}

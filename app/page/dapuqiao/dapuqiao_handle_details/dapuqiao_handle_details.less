@@ -1,0 +1,148 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: #efeff4;
+
+
+  .dapuqiao_details_container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+
+    &-body {
+      height: calc(100%);
+      position: relative;
+
+      &-content {
+        width: 100%;
+        height: 100%;
+
+        border-radius: 10px;
+        background-color: white;
+        padding: 10px 25px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+
+        &-items {
+          flex-grow: 1;
+        }
+
+        &-item {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          border-bottom: 1px solid #efeff4;
+          height: 50px;
+
+          &-title {
+            color: #666666;
+            flex-grow: 0;
+            width: 90px;
+          }
+
+          &-value {
+            flex-grow: 1;
+
+            select,
+            input {
+              font-size: 16px;
+              border: none;
+              outline: none;
+              height: 100%;
+              width: 100%;
+              background-color: white;
+              padding: 0;
+              margin: 0;
+            }
+          }
+        }
+
+        &-images {
+          width: 100%;
+          border-top: 1px solid #efeff4;
+
+          .images {
+            &-head {
+              height: 50px;
+              display: flex;
+              align-items: center;
+            }
+
+            &-list {
+              display: flex;
+              flex-wrap: wrap;
+
+              &>* {
+                width: 100px;
+                height: 100px;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                background-color: black;
+                border-radius: 10px;
+                margin: 5px;
+                position: relative;
+
+
+              }
+
+              .img {
+                &-item {
+                  &-del {
+                    position: absolute;
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    right: -5px;
+                    top: -5px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 12px;
+                  }
+                }
+
+                &-plus {
+                  background-color: #f1f1f1;
+                  color: #c4c4c4;
+                  font-size: 50px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                }
+              }
+            }
+          }
+        }
+
+        &-buttons {
+          width: 100%;
+          height: 50px;
+
+          .handle-details-button {
+            background-color: #3a93ff;
+            color: white;
+            width: 100%;
+            border-radius: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+          }
+        }
+      }
+
+    }
+  }
+}

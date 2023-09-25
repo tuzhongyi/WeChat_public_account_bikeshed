@@ -1,0 +1,221 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.mui-page {
+  height: 100%;
+}
+
+.mui-page .full {
+  height: calc(100%);
+  overflow: hidden;
+
+}
+
+.weui-form-preview__label {
+  max-width: 4em;
+  white-space: nowrap;
+
+  margin-right: 30px;
+}
+
+.weui-form-preview__value,
+.weui-form-preview__label {
+  text-align: left;
+  font-size: 1em;
+}
+
+
+.red-text {
+  color: red;
+}
+
+.sky-blue-text {
+  color: #3a94ff;
+}
+
+.item-content-center {
+  min-height: 100px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  min-height: 60px;
+  height: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.item-content-center .weui-btn {
+  margin-top: 0 !important;
+}
+
+.weui-btn {
+  background-color: #68aeff;
+  height: 40px;
+  font-size: 14.4px;
+  line-height: 24px;
+  text-align: center;
+  width: 192px;
+
+}
+
+
+.frame {
+  position: absolute;
+  width: calc(100% - 30px);
+  height: calc(100% - 45px);
+  top: 0px;
+  pointer-events: none;
+  background-repeat: no-repeat;
+}
+
+.max {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 999;
+  position: absolute;
+  top: 0px;
+  display: none;
+}
+
+#origin-img .swiper-slide .swiper-zoom-container {}
+
+#origin-img .swiper-slide img {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+#origin-img .swiper-slide img.max-frame {
+  pointer-events: none;
+  background-repeat: no-repeat;
+
+  z-index: 2;
+}
+
+
+.swiper-container.max {
+  overflow: auto;
+}
+
+.swiper-container.max .swiper-wrapper .swiper-slide {
+  width: 140px;
+  padding: 0 2px;
+  box-sizing: border-box;
+  /* transition: all 0.3s ease-in-out; */
+  font-size: 0;
+  height: 100%;
+}
+
+.swiper-container.max .swiper-wrapper .swiper-slide img {
+  width: 100%;
+}
+
+.swiper-container.max .swiper-pagination {
+  box-sizing: border-box;
+  /* text-align: right; */
+  color: white;
+  padding-right: 10px;
+  /* display: none; */
+  pointer-events: none;
+}
+
+.swiper-pagination-img {
+  color: white;
+  text-align: right;
+  bottom: 0px;
+  left: -4px;
+}
+
+#origin-img {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+}
+
+#origin-img .swiper-slide img {
+  width: 100%;
+  vertical-align: middle;
+  z-index: 1;
+}
+
+#origin-img .swiper-zoom-container {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: center;
+}
+
+img {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+img[data-src] {
+  opacity: 0;
+}
+
+.video-control {
+  color: white;
+  width: 50px;
+  height: 50px;
+  z-index: 2;
+  position: absolute;
+  /* margin-top: -10%; */
+  background-image: url(../../assets/play.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.video-control>i {
+  font-size: 50px;
+  line-height: initial;
+}
+
+.swiper-slide-active {
+  overflow-y: auto;
+  display: flex;
+  flex-flow: column;
+}
+
+.weui-form-preview__item .weui-form-preview__value textarea {
+  width: calc(100% - 2px);
+  height: 50px;
+  font-size: 19.2px;
+  line-height: 38.4px
+}
+
+.weui-btn.submit__btn {
+  background-color: #52c465;
+}
+
+header {
+  display: flex;
+  height: 40px;
+  flex-shrink: 0;
+  background-color: hsl(0, 0%, 100%);
+  color: #b2b2b2;
+  padding: 0 12px;
+  justify-content: space-between;
+  align-items: center;
+}

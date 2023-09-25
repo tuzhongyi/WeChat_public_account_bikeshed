@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>base list</title>
+
+    <link rel="stylesheet" href="./test.css" type="text/css" />
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+
+    <style>
+      html,
+      body {
+        border: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .video {
+        width: 100vw;
+        height: calc(100vw / 16 * 9);
+        background-color: gray;
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+      }
+
+      .video_background {
+        background-color: black;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="openid"></div>
+
+    <div>
+      location
+      <div><span>经度：</span><span id="lon"></span></div>
+      <div><span>纬度：</span><span id="lat"></span></div>
+      <button id="getlocation">获取</button>
+    </div>
+
+    <script src="./test_init.ts"></script>
+  </body>
+</html>

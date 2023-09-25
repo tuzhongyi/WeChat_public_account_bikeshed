@@ -1,0 +1,53 @@
+<div class="mobile-view-header">{{ model.title }}</div>
+<div class="mobile-view-content">
+  <form [formGroup]="form">
+    <div class="form">
+      <table cellpadding="10">
+        <tr class="item">
+          <td class="title">手机号码：</td>
+          <td colspan="2">
+            <input
+              type="text"
+              class="custom form-control"
+              formControlName="mobileNo"
+              placeholder="手机号码"
+            />
+          </td>
+        </tr>
+        <tr class="item">
+          <td class="title">请输入验证码：</td>
+          <td>
+            <input
+              type="text"
+              class="custom form-control"
+              formControlName="checkCode"
+              placeholder="验证码"
+            />
+          </td>
+          <td>
+            <button
+              [ngClass]="{
+                'hw-blue-btn': !getCheckCodeDisabled,
+                'hw-gray-m-btn': !!getCheckCodeDisabled
+              }"
+              class="send-code"
+              (click)="getCheckCode($event)"
+            >
+              获取验证码<span *ngIf="seconds > 0">({{ seconds }})</span>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+  <div class="operation">
+    <button
+      class="hw-green-btn"
+      style="margin-right: 20px"
+      (click)="ok($event)"
+    >
+      {{ model.okButtonText }}
+    </button>
+    <button class="hw-gray-m-btn" (click)="cancel($event)">取消</button>
+  </div>
+</div>

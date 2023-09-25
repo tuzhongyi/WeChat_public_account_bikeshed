@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>base list</title>    
+    
+    <link rel="stylesheet" href="./test.css" type="text/css" />
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    
+    <style>
+    
+html,
+body {
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video {
+    width: 100vw;
+    height: calc(100vw / 16 * 9);
+    background-color: gray;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%)
+}
+
+.video_background {
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}</style>
+</head>
+
+<body>
+
+  <div class="openid"></div>
+
+
+    <div class="video_background player">
+    <div class="video"></div>
+    <div class="tools">
+    <div class="tools-content">
+        <div class="top">
+        
+        </div>
+        <div class="center">
+            <div class="play glyphicon glyphicon-play"></div>
+        </div>
+        <div class="bottom">
+            <div class="left" style="width:calc(100% - 40px)">
+                <label class="begin_time" title="当前时间">00:00</label>/<label class="end_time" title="结束时间">00:00</label>
+                <div style="width:calc(100% - 80px)">
+                    <input class="position" title="00:00:00" type="range" value="0" min="0" max="1">
+                </div>
+            </div>
+        
+        
+            <div class="right" style="width:25px">
+                <a class="fullscreen glyphicon glyphicon-resize-full" title="全屏">
+                </a>
+            </div>
+        </div>
+    
+    </div>
+    </div>
+    <!-- <iframe></iframe> -->
+   <!-- <script src="./test.ts"></script> -->
+   
+<script src="./test_init.ts"></script>
+</body>
+
+</html>

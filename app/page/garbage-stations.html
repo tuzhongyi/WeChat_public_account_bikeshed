@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
+    <meta http-equiv="Cache-Control" content="max-age=7200" />
+    <title>生活垃圾监管平台</title>
+    <link
+      rel="stylesheet"
+      href="../assets/howell.font/howell.font.css"
+      type="text/css"
+    />
+
+    <link rel="stylesheet" href="./css/index.css" type="text/css" />
+    <link rel="stylesheet" href="./css/player1.css" type="text/css" />
+    <link rel="stylesheet" href="./css/video-control.css" type="text/css" />
+
+    <script src="../assets/base64.js"></script>
+    <script src="../assets/WSPlayerProxy1.js"></script>
+    <style></style>
+  </head>
+
+  <body>
+    <header>
+      <div class="header-item" id="searchBar">
+        <input type="search" id="searchInput" placeholder="搜索" />
+        <i id="btn_search" class="howell-icon-search"></i>
+      </div>
+      <div class="header-item">
+        <div class="header-item__btn" id="img_division">
+          <i class="howell-icon-list" style="font-weight: bold"></i>
+        </div>
+        <div class="header-item__btn" id="filter">
+          <span> 筛选</span><i class="howell-icon-screen"></i>
+        </div>
+      </div>
+    </header>
+
+    <main class="hw-content">
+      <header>
+        <div class="header-item">
+          <div>垃圾厢房</div>
+        </div>
+        <div class="header-item">
+          <div id="count"></div>
+        </div>
+      </header>
+      <!-- 重新设置高度是因为底部导航栏的遮挡-->
+      <main style="margin-top: 5px; height: calc(100% - 60px)">
+        <div id="minirefresh" class="minirefresh-wrap">
+          <div class="minirefresh-scroll">
+            <div id="hw-container">
+              <template id="card-template">
+                <div class="hw-content__card">
+                  <div class="content__title">
+                    <div class="content__title__head"></div>
+                    <div class="content_title__footer">
+                      <div class="constDrop item" title="垃圾滞留">
+                        <i class="howell-icon-garbagebags"></i>
+                        <span class="constDrop-number">0</span>
+                      </div>
+                      <div class="content__title__badage">正常</div>
+                    </div>
+                  </div>
+                  <div class="content__img">
+                    <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                          <img
+                            src=""
+                            alt=""
+                            data-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABIAAAAKIAQAAAAAgULygAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAHdElNRQflAgIBCxpFwPH8AAAAcklEQVR42u3BMQEAAADCoPVPbQZ/oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+A28XAAEDwmj2AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAyLTAyVDAxOjExOjI2KzAwOjAwOo9+nAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMi0wMlQwMToxMToyNiswMDowMEvSxiAAAAAASUVORK5CYII="
+                          />
+
+                          <div class="nosignal">NOSIGNAL</div>
+                        </div>
+                      </div>
+                      <div class="swiper-pagination"></div>
+                    </div>
+                  </div>
+                  <div class="content__footer">
+                    <div class="division-name"></div>
+                    <div class="static-number">
+                      <div class="illegalDrop item" title="垃圾落地">
+                        <i class="howell-icon-nolittering"></i>
+                        <span class="illegalDrop-number">0</span>
+                      </div>
+                      <div class="MixedInto item" title="混合投放">
+                        <i class="howell-icon-mixlittering"></i>
+                        <span class="MixedInto-number">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </main>
+    </main>
+
+    <!--
+    剥离侧边栏代码
+  -->
+    <div id="aside-container"></div>
+
+    <div class="swiper-container" id="origin-img">
+      <div class="swiper-wrapper"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <div id="chart-container"></div>
+    <div
+      class="inner-container user-label-container"
+      id="user-label-container"
+    ></div>
+
+    <script src="./ts/GarbageStationMain.ts"></script>
+  </body>
+</html>
