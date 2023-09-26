@@ -40,4 +40,12 @@ export enum EventType {
   GarbageDropHandle = 7,
   /** 小包垃圾处置完成事件 */
   GarbageDropAll = 0,
+  /**	车辆占道，扩展功能事件	11 */
+  VehiclePresence = 11,
+  /**	紧急按钮	12 */
+  PanicButton = 12,
+  /**	火灾检测	13 */
+  Smoke = 13,
+  /**	大件垃圾数据更新	14 */
+  ConstructionData = 14,
 }

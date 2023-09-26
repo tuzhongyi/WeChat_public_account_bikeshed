@@ -18,6 +18,7 @@ import {
   GarbageFullEventRecord,
   IllegalDropEventRecord,
   MixedIntoEventRecord,
+  SmokeEventRecord,
 } from '../../../data-core/model/waste-regulation/event-record'
 import {
   GarbageDropProcessParams,
@@ -33,13 +34,9 @@ import {
 import { VideoUrl } from '../../../data-core/model/waste-regulation/video-model'
 import { ResourceRole, WeChatUser } from '../../../data-core/model/we-chat'
 import { Service } from '../../../data-core/repuest/service'
+import { Duration } from '../tools/datetime.tool'
 import { DataCache } from './Cache'
-import {
-  IUserLabelController,
-  OneDay,
-  Paged,
-  StatisticNumber,
-} from './IController'
+import { IUserLabelController, Paged, StatisticNumber } from './IController'
 import { IDataController } from './modules/IController/IDataController'
 import { IDetailsEvent } from './modules/IController/IDetailsEvent'
 import { IEventHistory } from './modules/IController/IEventHistory'
@@ -188,7 +185,7 @@ export abstract class DataController
     return result
   }
   abstract getResourceRoleList: () => Promise<ResourceRole[]>
-  getEventCount = async (day: OneDay) => {
+  getEventCount = async (day: Duration) => {
     let result: StatisticNumber = {
       id: '',
       name: '',
@@ -214,11 +211,11 @@ export abstract class DataController
     sources: ResourceRole[]
   ): Promise<Array<StatisticNumber>>
   abstract getStatisticNumberListInOtherDay(
-    day: OneDay,
+    day: Duration,
     sources: ResourceRole[]
   ): Promise<Array<StatisticNumber>>
   getStatisticNumberList = async (
-    day: OneDay
+    day: Duration
   ): Promise<Array<StatisticNumber>> => {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -237,7 +234,7 @@ export abstract class DataController
     }
   }
 
-  abstract getHistory(day: OneDay): Promise<
+  abstract getHistory(day: Duration): Promise<
     | EventNumber[]
     | {
         IllegalDrop: Array<EventNumber>
@@ -350,20 +347,18 @@ export abstract class DataController
   }
 
   getEventListParams(
-    day: OneDay,
+    day: Duration,
     page: Paged,
     type?: EventType,
     ids?: string[]
   ) {
-    const params: GetEventRecordsParams = {
-      BeginTime: day.begin.toISOString(),
-      EndTime: day.end.toISOString(),
-      PageSize: page.size,
-      PageIndex: page.index,
-      Desc: true,
-
-      ResourceIds: this.roles.map((x) => x.Id),
-    }
+    let params = new GetEventRecordsParams()
+    params.BeginTime = day.begin
+    params.EndTime = day.end
+    params.PageSize = page.size
+    params.PageIndex = page.index
+    params.Desc = true
+    params.ResourceIds = this.roles.map((x) => x.Id)
     if (ids) {
       params.ResourceIds = ids
     }
@@ -372,7 +367,10 @@ export abstract class DataController
 
   async getEventListByParams(type: EventType, params: GetEventRecordsParams) {
     let promise: PagedList<
-      IllegalDropEventRecord | MixedIntoEventRecord | GarbageFullEventRecord
+      | IllegalDropEventRecord
+      | MixedIntoEventRecord
+      | GarbageFullEventRecord
+      | SmokeEventRecord
     >
 
     switch (type) {
@@ -422,6 +420,9 @@ export abstract class DataController
       case EventType.GarbageDropAll:
         promise = await this.service.event.record.garbageDrop.list(params)
         break
+      case EventType.Smoke:
+        promise = await this.service.event.record.smoke.list(params)
+        break
       default:
         return undefined
     }
@@ -430,7 +431,7 @@ export abstract class DataController
   }
 
   getEventList = async (
-    day: OneDay,
+    day: Duration,
     page: Paged,
     type: EventType,
     ids?: string[]
@@ -446,6 +447,7 @@ export abstract class DataController
       | MixedIntoEventRecord
       | GarbageFullEventRecord
       | GarbageDropEventRecord
+      | SmokeEventRecord
     switch (type) {
       case EventType.IllegalDrop:
         response = await this.service.event.record.illegalDrop.get(eventId)
@@ -473,6 +475,9 @@ export abstract class DataController
       case EventType.GarbageDropTimeout:
         response = await this.service.event.record.garbageDrop.get(eventId)
         break
+      case EventType.Smoke:
+        response = await this.service.event.record.smoke.get(eventId)
+        break
       default:
         return undefined
     }
@@ -486,23 +491,25 @@ export abstract class DataController
     | IllegalDropEventRecord
     | MixedIntoEventRecord
     | GarbageFullEventRecord
+    | SmokeEventRecord
     | undefined
   >
   GetEventRecord(
     type: EventType,
     index: number,
-    day?: OneDay,
+    day?: Duration,
     sourceIds?: string[]
   ): Promise<
     | IllegalDropEventRecord
     | MixedIntoEventRecord
     | GarbageFullEventRecord
+    | SmokeEventRecord
     | undefined
   >
   async GetEventRecord(
     type: EventType,
     index: string | number,
-    day?: OneDay,
+    day?: Duration,
     sourceIds?: string[]
   ) {
     if (typeof index === 'string') {
@@ -529,7 +536,7 @@ export abstract class DataController
     garbageStationId: string,
     paged: Paged,
     type?: EventType,
-    day: OneDay = { begin: new Date(), end: new Date() }
+    day: Duration = { begin: new Date(), end: new Date() }
   ): Promise<
     | PagedList<
         | IllegalDropEventRecord
@@ -577,7 +584,7 @@ export abstract class DataController
 
   async getGarbageStationNumberStatisticList(
     ids: string[],
-    day: OneDay
+    day: Duration
   ): Promise<GarbageStationNumberStatisticV2[]> {
     let params: GetGarbageStationStatisticNumbersParamsV2 = {
       BeginTime: day.begin,
@@ -612,7 +619,7 @@ export abstract class DataController
     return response
   }
   async getGarbageDropEventList(
-    day: OneDay,
+    day: Duration,
     page: Paged,
     type?: EventType,
     ids?: string[]

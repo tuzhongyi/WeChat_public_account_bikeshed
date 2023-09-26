@@ -311,3 +311,15 @@ body {
   font-size: 50px;
   line-height: initial;
 }
+
+.green-text {
+  color: #21E452;
+}
+
+.red-text {
+  color: #fd2f2d;
+}
+
+.orange-text {
+  color: #ff9100;
+}

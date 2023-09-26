@@ -10,9 +10,9 @@ export class Language {
       case ResourceType.County:
         return '街道'
       case ResourceType.Committees:
-        return '居委会'
+        return '责任网格'
       case ResourceType.GarbageStations:
-        return '厢房'
+        return '车棚'
       default:
         return ''
     }
@@ -33,6 +33,8 @@ export class Language {
         return '小包垃圾处置'
       case EventType.GarbageDropTimeout:
         return '小包垃圾处置超时'
+      case EventType.Smoke:
+        return '火灾预警'
       default:
         return ''
     }
@@ -53,6 +55,8 @@ export class Language {
         return '垃圾处置'
       case EventType.GarbageDropTimeout:
         return '垃圾滞留'
+      case EventType.Smoke:
+        return '火灾预警'
       default:
         return ''
     }

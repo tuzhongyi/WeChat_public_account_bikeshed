@@ -9,6 +9,7 @@ class EventRecordUrl {
   illegaldrop = new EventRecordIllegalDrop(this.basic())
   garbagefull = new EventRecordGarbageFull(this.basic())
   mixedinto = new EventRecordMixedInto(this.basic())
+  smoke = new EventRecordSmokeUrl(this.basic())
 }
 class EventRecordIllegalDrop {
   constructor(private base: string) {}
@@ -70,6 +71,19 @@ class EventRecordGarbageDropUrl {
   }
   accept(id: string) {
     return `${this.item(id)}/Accept`
+  }
+}
+
+class EventRecordSmokeUrl {
+  constructor(private base: string) {}
+  basic() {
+    return `${this.base}/Smoke`
+  }
+  list() {
+    return `${this.basic()}/List`
+  }
+  item(id: string) {
+    return `${this.basic()}/${id}`
   }
 }
 

@@ -7,23 +7,24 @@ import {
   CameraImageUrl,
   EventRecord,
   GarbageDropEventRecord,
-  GarbageFullEventRecord,
   IEventRecord,
   IllegalDropEventRecord,
   MixedIntoEventRecord,
+  SmokeEventRecord,
 } from '../../data-core/model/waste-regulation/event-record'
 import { ResourceType } from '../../data-core/model/we-chat'
 import { HowellHttpClient } from '../../data-core/repuest/http-client'
 import { Service } from '../../data-core/repuest/service'
 import { ControllerFactory } from './data-controllers/ControllerFactory'
 import { DataController } from './data-controllers/DataController'
-import { OneDay, Paged } from './data-controllers/IController'
+import { Paged } from './data-controllers/IController'
 import { IDetailsEvent } from './data-controllers/modules/IController/IDetailsEvent'
 import { ImageController } from './data-controllers/modules/ImageControl'
 import { SwiperPageControl } from './data-controllers/modules/SwiperPageControl'
 import { ToastMessage } from './data-controllers/modules/ToastMessage'
 import { IImageUrl } from './data-controllers/ViewModels'
 import { Language } from './language'
+import { Duration } from './tools/datetime.tool'
 
 Swiper.use([Pagination])
 
@@ -48,7 +49,7 @@ export namespace EventInformationPage {
     pageIndex?: number
     template: HTMLTemplateElement
     paged?: Paged
-    day?: OneDay
+    day?: Duration
     isLoaded: boolean = false
     message: ToastMessage
 
@@ -144,7 +145,7 @@ export namespace EventInformationPage {
       }
     }
 
-    async getData(pageIndex?: number, day?: OneDay) {
+    async getData(pageIndex?: number, day?: Duration) {
       const eventId = getQueryVariable('eventid')
       const strEventType = getQueryVariable('eventtype')
       const str_filter = getQueryVariable('filter')
@@ -153,7 +154,7 @@ export namespace EventInformationPage {
       if (str_filter) {
         filter = JSON.parse(base64decode(str_filter))
       }
-      let eventType = EventType.IllegalDrop
+      let eventType = EventType.Smoke
 
       if (strEventType) {
         eventType = parseInt(strEventType)
@@ -347,10 +348,7 @@ export namespace EventInformationPage {
       }
     }
 
-    fillGarbageFullEventRecord(
-      item: GarbageFullEventRecord,
-      element?: HTMLElement
-    ) {
+    fillSmokeEventRecord(item: SmokeEventRecord, element?: HTMLElement) {
       let source: HTMLElement | Document = element ? element : document
 
       const police__type = source.getElementsByClassName('police__type'),
@@ -465,7 +463,7 @@ export namespace EventInformationPage {
               if (str) {
                 index = parseInt(str)
               }
-              this.imageController.showDetail(selectors, urls, false, index)
+              this.imageController.showDetail(selectors, urls, true, index)
             })
 
             detail_img.setAttribute('cameraName', imageUrl.CameraName)
@@ -879,15 +877,14 @@ export namespace EventInformationPage {
     }
 
     fillDetail(item: IEventRecord, element?: HTMLElement) {
-      if (item instanceof GarbageFullEventRecord) {
-        this.fillGarbageFullEventRecord(item, element)
+      if (item instanceof SmokeEventRecord) {
+        this.fillSmokeEventRecord(item, element)
       } else if (item instanceof GarbageDropEventRecord) {
         this.fillGarbageDropEventRecord(item, element)
       } else if (
         item instanceof IllegalDropEventRecord ||
         item instanceof MixedIntoEventRecord
       ) {
-        this.fillEventRecord(item, element)
       } else {
       }
     }

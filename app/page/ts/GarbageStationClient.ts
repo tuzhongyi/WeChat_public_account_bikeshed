@@ -31,7 +31,6 @@ import 'swiper/swiper.less'
 import { getQueryVariable } from '../../common/tool'
 import { Page } from '../../data-core/model/page'
 import { UserLabel } from '../../data-core/model/user-stystem'
-import { EventType } from '../../data-core/model/waste-regulation/event-number'
 import { VideoPlugin } from './data-controllers/modules/VideoPlugin'
 import CreateUserLabelAside from './GarbageStationCreateUserLabel'
 import GarbageStationServer from './GarbageStationServer'
@@ -447,9 +446,6 @@ export default class GarbageStationClient implements IObserver {
 
       // v.StationState = Math.random() * 3 >> 0;
 
-      if (typeof v.StationState == 'number') {
-        v.StationState = new Flags<StationState>(v.StationState)
-      }
       if (!v.DivisionId) continue
       let info = tempContent.cloneNode(true) as DocumentFragment
 
@@ -543,38 +539,31 @@ export default class GarbageStationClient implements IObserver {
         )
       }
 
-      let illegalDrop = info.querySelector(
-        '.illegalDrop-number'
-      ) as HTMLSpanElement
-      let mixedInto = info.querySelector('.MixedInto-number') as HTMLSpanElement
-
-      v.NumberStatistic?.TodayEventNumbers!.forEach((eventNumber) => {
-        if (eventNumber.EventType == EventType.IllegalDrop) {
-          illegalDrop.textContent = eventNumber.DayNumber.toString()
-        } else if (eventNumber.EventType == EventType.MixedInto) {
-          mixedInto.textContent = eventNumber.DayNumber.toString()
-        }
-      })
-      ;(
-        info.querySelector('.constDrop-number') as HTMLElement
-      ).textContent = `${
-        hour == 0 ? minute + '分钟' : hour + '小时' + minute + '分钟'
-      }`
+      let statistic = info.querySelector('.static-number') as HTMLSpanElement
 
       title_bandage.classList.remove('red')
       title_bandage.classList.remove('green')
       title_bandage.classList.remove('orange')
+      statistic.classList.remove('red-text')
+      statistic.classList.remove('green-text')
+      statistic.classList.remove('orange-text')
       let states = v.StationState as Flags<StationState>
       title_bandage.textContent = '' //states.value.toString()
       if (states.contains(StationState.Error)) {
         title_bandage.textContent += Language.StationState(StationState.Error)
         title_bandage.classList.add('red')
+        statistic.textContent = Language.StationState(StationState.Error)
+        statistic.classList.add('red-text')
       } else if (states.contains(StationState.Full)) {
         title_bandage.textContent += Language.StationState(StationState.Full)
         title_bandage.classList.add('orange')
+        statistic.textContent = Language.StationState(StationState.Full)
+        statistic.classList.add('orange-text')
       } else {
         title_bandage.textContent += Language.StationState(StationState.Normal)
         title_bandage.classList.add('green')
+        statistic.textContent = Language.StationState(StationState.Normal)
+        statistic.classList.add('green-text')
       }
 
       this.createFooter(v.Id, v.DivisionId)
@@ -637,7 +626,7 @@ export default class GarbageStationClient implements IObserver {
       content_card.addEventListener('click', function (e) {
         let target = e.target as HTMLElement
         let currentTarget = e.currentTarget as HTMLDivElement
-        if (target.tagName.toString().toLowerCase() == 'img') {
+        if (!!_this.getTarget(target, 'tagName', 'img')) {
           let ev = new CustomEvent('cat', {
             detail: {
               index: target.getAttribute('index'),
@@ -645,13 +634,43 @@ export default class GarbageStationClient implements IObserver {
             },
           })
           _this.customElement.dispatchEvent(ev)
-        } else {
-          if (_this.myChartAside && _this.myChartAside.contentLoaded) {
-            _this.myChartAside.pickerId = new Date().getTime()
-            _this.myChartAside.id = currentTarget.id!
-            _this.myChartAside.manualSlide()
-            _this.showChart = true
+        } else if (!!_this.getTarget(target, 'classList', 'user-label')) {
+          let current = _this.getTarget(target, 'classList', 'user-label')
+          if (!current) {
+            return
           }
+          // user-label-310110016005035000
+          let id = current.id.substring('user-label-'.length)
+          let data = _this.garbageStationsTotal.find(
+            (x) => x.Id === id
+          ) as GarbageStationViewModel
+          let promise = data.getUserLabel()
+
+          promise
+            .then((x) => {
+              let p = new UserLabelAside(
+                _this.elements.container.userLabelContainer,
+                data,
+                _this.dataController
+              )
+
+              p.init()
+              p.add(_this)
+              _this.showUserLabel = true
+            })
+            .catch((x) => {
+              let p = new CreateUserLabelAside(
+                _this.elements.container.userLabelContainer,
+                data,
+                _this.dataController
+              )
+
+              p.init()
+              p.add(_this)
+
+              _this.showUserLabel = true
+            })
+        } else {
         }
       })
 
@@ -666,6 +685,34 @@ export default class GarbageStationClient implements IObserver {
       this.elements.container.hwContainer?.appendChild(info)
     }
   }
+
+  private getTarget(
+    target: HTMLElement,
+    property: 'tagName' | 'classList',
+    name: string
+  ): HTMLElement | undefined {
+    let has = false
+    switch (property) {
+      case 'tagName':
+        has = target.tagName.toString().toLowerCase() === name
+        break
+      case 'classList':
+        has = target.classList.contains(name)
+        break
+      default:
+        break
+    }
+
+    if (has) {
+      return target
+    }
+    if (target.parentElement) {
+      return this.getTarget(target.parentElement, property, name)
+    } else {
+      return undefined
+    }
+  }
+
   private async loadCameraImage(id: string) {
     let res = await this.dataController.getCameraList(
       id,
@@ -702,19 +749,9 @@ export default class GarbageStationClient implements IObserver {
             isSelected: false,
           },
           {
-            Name: Language.StationState(StationState.Full),
-            Id: StationState.Full.toString(),
-            isSelected: false,
-          },
-          {
             Name: Language.StationState(StationState.Error),
             Id: StationState.Error.toString(),
             isSelected: false,
-          },
-          {
-            Name: this.garbageDropTitle,
-            Id: this.garbageDropState,
-            isSelected: !!eventType,
           },
         ],
         type: 'state',

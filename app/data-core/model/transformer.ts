@@ -2,7 +2,11 @@ import { TransformationType, TransformFnParams } from 'class-transformer'
 
 export function transformDateTime(params: TransformFnParams) {
   if (params.type === TransformationType.PLAIN_TO_CLASS) {
-    return new Date(params.value)
+    if (params.value instanceof Date || !!params.value.getTime) {
+      return new Date(params.value.getTime())
+    } else {
+      return new Date(params.value)
+    }
   } else if (params.type === TransformationType.CLASS_TO_PLAIN) {
     let date = params.value as Date
     return `${date.getFullYear()}-${(date.getMonth() + 1)

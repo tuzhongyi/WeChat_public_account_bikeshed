@@ -3,11 +3,7 @@ import {
   GetDivisionsParams,
   GetGarbageStationsParams,
 } from '../../../data-core/model/server'
-import {
-  User,
-  UserLabel,
-  UserLabelType,
-} from '../../../data-core/model/user-stystem'
+import { UserLabel, UserLabelType } from '../../../data-core/model/user-stystem'
 import { Camera } from '../../../data-core/model/waste-regulation/camera'
 import { Division } from '../../../data-core/model/waste-regulation/division'
 import { EventTask } from '../../../data-core/model/waste-regulation/event-task'
@@ -149,7 +145,7 @@ export class CameraViewModel extends Camera {
     return this.service.sr.PreviewUrls({
       CameraId: this.Id,
       Protocol: 'ws-ps',
-      StreamType: 2,
+      StreamType: 1,
     })
   }
   getVodUrl(begin: Date, end: Date) {

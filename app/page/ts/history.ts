@@ -1,4 +1,4 @@
-import { dateFormat, getAllDay, getQueryVariable } from '../../common/tool'
+import { dateFormat, getQueryVariable } from '../../common/tool'
 
 import { PagedList } from '../../data-core/model/page'
 import { ResourceType } from '../../data-core/model/we-chat'
@@ -12,16 +12,14 @@ import { Language } from './language'
 import { EventType } from '../../data-core/model/waste-regulation/event-number'
 import {
   EventRecord,
-  GarbageDropEventRecord,
-  GarbageFullEventRecord,
-  IllegalDropEventRecord,
-  MixedIntoEventRecord,
+  SmokeEventRecord,
 } from '../../data-core/model/waste-regulation/event-record'
 import { SwiperControl } from './data-controllers/modules/SwiperControl'
 
 import { NavigationWindow } from '.'
 import { DataController } from './data-controllers/DataController'
 import { IEventHistory } from './data-controllers/modules/IController/IEventHistory'
+import { DateTimeTool } from './tools/datetime.tool'
 
 declare var weui: any
 
@@ -38,25 +36,13 @@ export namespace EventHistoryPage {
     filterBtn: document.querySelector('#filter') as HTMLDivElement,
     totalRecordCount: document.getElementById('illegalDropTotalRecordCount')!,
     recordCount: document.getElementById('illegalDropRecordCount')!,
-    IllegalDrop: {
-      list: document.getElementById('illegalDrop') as HTMLDivElement,
-    },
-    MixedInto: {
-      list: document.getElementById('mixedInto') as HTMLDivElement,
-    },
-    GarbageFull: {
-      list: document.getElementById('garbageFull') as HTMLDivElement,
-    },
-    GarbageDrop: {
-      list: document.getElementById('garbageDrop') as HTMLDivElement,
+    Smoke: {
+      list: document.getElementById('smoke') as HTMLDivElement,
     },
   }
 
   var MiniRefreshId = {
-    IllegalDrop: 'illegalDropRefreshContainer',
-    MixedInto: 'mixedIntoRefreshContainer',
-    GarbageFull: 'garbageFullRefreshContainer',
-    GarbageDrop: 'garbageDropRefreshContainer',
+    Smoke: 'illegalDropRefreshContainer',
   }
 
   class Template {
@@ -87,7 +73,7 @@ export namespace EventHistoryPage {
     }
   }
 
-  export class IllegalDropEvent {
+  export class EventRecordController {
     /**
      * autho:pmx
      */
@@ -110,14 +96,7 @@ export namespace EventHistoryPage {
       private dataController: IEventHistory,
       private openId: string
     ) {
-      this.parentElement[EventType.IllegalDrop] = element.IllegalDrop.list
-      this.parentElement[EventType.MixedInto] = element.MixedInto.list
-      this.parentElement[EventType.GarbageFull] = element.GarbageFull.list
-      this.parentElement[EventType.GarbageDrop] = element.GarbageDrop.list
-      this.parentElement[EventType.GarbageDropTimeout] =
-        element.GarbageDrop.list
-      this.parentElement[EventType.GarbageDropHandle] = element.GarbageDrop.list
-
+      this.parentElement[EventType.Smoke] = element.Smoke.list
       this.filter = {
         date: new Date(),
       }
@@ -171,11 +150,7 @@ export namespace EventHistoryPage {
     }
 
     convert(
-      record:
-        | IllegalDropEventRecord
-        | GarbageFullEventRecord
-        | MixedIntoEventRecord
-        | GarbageDropEventRecord,
+      record: SmokeEventRecord,
       index: number,
       getImageUrl: (id: string) => string | undefined
     ) {
@@ -183,20 +158,13 @@ export namespace EventHistoryPage {
       if (record.ImageUrl) {
         template.img.src = getImageUrl(record.ImageUrl) as string
       }
-      if (record instanceof GarbageFullEventRecord) {
+      if (record instanceof SmokeEventRecord) {
         if (
           record.Data.CameraImageUrls &&
           record.Data.CameraImageUrls.length > 0
         ) {
           template.img.src = getImageUrl(
             record.Data.CameraImageUrls[0].ImageUrl
-          ) as string
-        }
-      }
-      if (record instanceof GarbageDropEventRecord) {
-        if (record.Data.DropImageUrls && record.Data.DropImageUrls.length > 0) {
-          template.img.src = getImageUrl(
-            record.Data.DropImageUrls[0].ImageUrl
           ) as string
         }
       }
@@ -208,7 +176,7 @@ export namespace EventHistoryPage {
         template.footer.innerHTML = record.Data.DivisionName
       }
       if (record.EventTime && record.EventTime.format) {
-        template.remark.innerHTML = record.EventTime.format('HH:mm:ss')
+        template.remark.innerHTML = record.EventTime.format('MM月dd日 HH:mm:ss')
       }
       let item = document.createElement('div')
       item.id = record.EventId!
@@ -274,29 +242,14 @@ export namespace EventHistoryPage {
 
     getElementByDataType(type: EventType) {
       switch (type) {
-        case EventType.IllegalDrop:
-          return element.IllegalDrop.list
-        case EventType.MixedInto:
-          return element.MixedInto.list
-        case EventType.GarbageFull:
-          return element.GarbageFull.list
-        case EventType.GarbageDrop:
-        case EventType.GarbageDropHandle:
-        case EventType.GarbageDropTimeout:
-          return element.GarbageDrop.list
+        case EventType.Smoke:
+          return element.Smoke.list
         default:
           return undefined
       }
     }
 
-    view(
-      list: PagedList<
-        | IllegalDropEventRecord
-        | MixedIntoEventRecord
-        | GarbageFullEventRecord
-        | GarbageDropEventRecord
-      >
-    ) {
+    view(list: PagedList<SmokeEventRecord>) {
       for (let i = 0; i < list.Data.length; i++) {
         const data = list.Data[i]
         this.datas[data.EventId!] = data
@@ -313,18 +266,20 @@ export namespace EventHistoryPage {
         element.recordCount.innerHTML = '0'
       } else {
         // console.log("Page", list.Page);
-        element.recordCount.innerHTML = (
-          list.Page.PageSize * (list.Page.PageIndex - 1) +
-          list.Page.RecordCount
-        ).toString()
+        if (list.Page.RecordCount > 0) {
+          element.recordCount.innerHTML = (
+            list.Page.PageSize * (list.Page.PageIndex - 1) +
+            list.Page.RecordCount
+          ).toString()
+        }
       }
     }
     page: { [key: number]: Paged } = {}
-    eventType: EventType = EventType.IllegalDrop
+    eventType: EventType = EventType.Smoke
     selectedIds?: string[]
     async refresh(page: Paged, eventType: EventType) {
       // console.log("current page", page);
-      const day = getAllDay(date)
+      const day = DateTimeTool.allMonth(date)
 
       let data = await this.dataController.getEventList(
         day,
@@ -336,7 +291,7 @@ export namespace EventHistoryPage {
       if (data) {
         this.view(data)
         if (window.parent) {
-          ;(window.parent as NavigationWindow).Day = getAllDay(date)
+          ;(window.parent as NavigationWindow).Day = day
           ;(window.parent as NavigationWindow).RecordPage = {
             index: data.Page.PageIndex,
             size: data.Page.PageSize,
@@ -415,44 +370,11 @@ export namespace EventHistoryPage {
     }
 
     init() {
-      element.IllegalDrop.list.innerHTML = ''
-      element.MixedInto.list.innerHTML = ''
-      element.GarbageFull.list.innerHTML = ''
-      element.GarbageDrop.list.innerHTML = ''
+      element.Smoke.list.innerHTML = ''
       try {
-        this.miniRefresh[EventType.IllegalDrop] = this.createMiniRefresh(
-          MiniRefreshId.IllegalDrop,
+        this.miniRefresh[EventType.Smoke] = this.createMiniRefresh(
+          MiniRefreshId.Smoke,
           true,
-          (r) => {
-            this.miniRefreshDown(r)
-          },
-          (r) => {
-            this.miniRefreshUp(r)
-          }
-        )
-        this.miniRefresh[EventType.MixedInto] = this.createMiniRefresh(
-          MiniRefreshId.MixedInto,
-          false,
-          (r) => {
-            this.miniRefreshDown(r)
-          },
-          (r) => {
-            this.miniRefreshUp(r)
-          }
-        )
-        this.miniRefresh[EventType.GarbageFull] = this.createMiniRefresh(
-          MiniRefreshId.GarbageFull,
-          false,
-          (r) => {
-            this.miniRefreshDown(r)
-          },
-          (r) => {
-            this.miniRefreshUp(r)
-          }
-        )
-        this.miniRefresh[EventType.GarbageDrop] = this.createMiniRefresh(
-          MiniRefreshId.GarbageDrop,
-          false,
           (r) => {
             this.miniRefreshDown(r)
           },
@@ -473,6 +395,7 @@ export namespace EventHistoryPage {
           weui.datePicker({
             start: new Date(2020, 12 - 1, 1),
             end: new Date(),
+            depth: 2,
             onChange: function (result: any) {},
             onConfirm: (result: any) => {
               date = new Date(
@@ -492,7 +415,7 @@ export namespace EventHistoryPage {
       }
     }
     viewDatePicker(date: Date) {
-      element.date.innerHTML = dateFormat(date, 'yyyy年MM月dd日')
+      element.date.innerHTML = dateFormat(date, 'yyyy年MM月')
     }
     loadNavigation() {
       var navigation = document.getElementById('navigation')!
@@ -524,49 +447,26 @@ export namespace EventHistoryPage {
       }
     }
 
-    record?: IllegalDropEvent
-
-    getEventTypeByIndex(index: number) {
-      switch (index) {
-        case 0:
-          return EventType.IllegalDrop
-        case 1:
-          return EventType.GarbageFull
-        case 2:
-          return EventType.MixedInto
-        case 3:
-          return EventType.GarbageDrop
-        default:
-          return EventType.IllegalDrop
-      }
-    }
+    record?: EventRecordController
 
     SwiperControlChanged(index: number) {
       if (this.record) {
         // console.log("SwiperControlChanged")
-        this.record.eventType = this.getEventTypeByIndex(index)
+        this.record.eventType = EventType.Smoke
         this.record.clean()
         this.record.miniRefresh[this.record.eventType].resetUpLoading()
       }
     }
     getSwiperIndex(type: EventType) {
       switch (type) {
-        case EventType.GarbageDrop:
-        case EventType.GarbageDropTimeout:
-        case EventType.GarbageDropHandle:
-          return 3
-        case EventType.GarbageFull:
-          return 1
-        case EventType.MixedInto:
-          return 2
-        case EventType.IllegalDrop:
+        case EventType.Smoke:
         default:
           return 0
       }
     }
 
     initSwiper() {
-      let eventType = EventType.IllegalDrop
+      let eventType = EventType.Smoke
       // console.log(window.location.href);
       let strEventType = getQueryVariable('eventtype')
       // console.log(strEventType)
@@ -579,7 +479,7 @@ export namespace EventHistoryPage {
           container: '.swiper-container',
           pagination: '.swiper-pagination',
         },
-        navBar: ['垃圾落地', '满溢情况', '混合投放', '垃圾滞留'],
+        navBar: ['火灾预警'],
         callback: (index) => {
           this.SwiperControlChanged(index)
         },
@@ -612,7 +512,7 @@ export namespace EventHistoryPage {
         user.WUser!.Resources!
       )
 
-      this.record = new IllegalDropEvent(
+      this.record = new EventRecordController(
         type,
         dataController,
         user.WUser!.OpenId!

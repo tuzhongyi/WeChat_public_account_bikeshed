@@ -1,55 +1,16 @@
-import { PagedList } from '../../../data-core/model/page'
 import { UserLabel, UserLabelType } from '../../../data-core/model/user-stystem'
-import {
-  EventNumber,
-  EventType,
-} from '../../../data-core/model/waste-regulation/event-number'
-import {
-  GarbageDropEventRecord,
-  GarbageFullEventRecord,
-  IllegalDropEventRecord,
-  MixedIntoEventRecord,
-} from '../../../data-core/model/waste-regulation/event-record'
 import {
   GarbageStationGarbageCountStatistic,
   GarbageStationNumberStatisticV2,
 } from '../../../data-core/model/waste-regulation/garbage-station-number-statistic'
 import { VideoUrl } from '../../../data-core/model/waste-regulation/video-model'
-import { ResourceRole, WeChatUser } from '../../../data-core/model/we-chat'
-import {
-  CameraViewModel,
-  CommitteesViewModel,
-  CountyViewModel,
-  GarbageStationViewModel,
-  IPictureController,
-} from './ViewModels'
+import { ResourceRole } from '../../../data-core/model/we-chat'
+import { Duration } from '../tools/datetime.tool'
+import { GarbageStationViewModel } from './ViewModels'
 
 export interface GarbageCountsParams {
   IsTimeout: boolean
   IsHandle: boolean
-}
-
-/**
- * 一天
- *
- * @export
- * @interface OneDay
- */
-export interface OneDay {
-  /**
-   * 开始时间
-   *
-   * @type {Date}
-   * @memberof OneDay
-   */
-  begin: Date
-  /**
-   * 结束时间
-   *
-   * @type {Date}
-   * @memberof OneDay
-   */
-  end: Date
 }
 
 /**
@@ -205,13 +166,13 @@ export interface IGarbageStationStatistic {
    * 获取垃圾厢房数据统计
    *
    * @param {string[]} ids 垃圾厢房ID
-   * @param {OneDay} day 日期
+   * @param {Duration} day 日期
    * @returns {Promise<Array<GarbageStationNumberStatisticV2>>}
    * @memberof IGarbageStationStatistic
    */
   getGarbageStationNumberStatisticList(
     ids: string[],
-    day: OneDay
+    day: Duration
   ): Promise<Array<GarbageStationNumberStatisticV2>>
 
   /**

@@ -4,25 +4,24 @@ import { HowellUri } from '../../data-core/model/waste-regulation/howell-url'
 import { UserType } from '../../data-core/model/we-chat'
 import { HowellAuthHttp } from '../../data-core/repuest/howell-auth-http'
 import { HowellHttpClient } from '../../data-core/repuest/http-client'
-import { OneDay, Paged } from './data-controllers/IController'
+import { Paged } from './data-controllers/IController'
+import { Duration } from './tools/datetime.tool'
 
 export interface NavigationWindow extends Window {
   User: SessionUser
   Authentication: HowellAuthHttp
   RecordPage?: Paged
-  Day?: OneDay
+  Day?: Duration
   Querys?: any
   pageChange: (index: number, params?: any) => void
 }
 
 export enum NavigationWindowIndex {
   none = -1,
-  data = 0,
-  // task = 1,
+  bikeshed = 0,
   history = 1,
-  garbage_station = 2,
-  garbage_drop = 3,
-  user = 4,
+
+  user = 2,
 }
 
 // 命名空间编译成自执行函数
@@ -31,17 +30,9 @@ namespace Navigation {
   window.recordDetails = null
   window.showOrHideAside = function (url, params) {
     if (index < NavigationWindowIndex.none) {
-      index = NavigationWindowIndex.garbage_drop
+      index = NavigationWindowIndex.bikeshed
       let garbageDropPage = items[index] as HTMLLinkElement
       garbageDropPage.click()
-    } else if (index < NavigationWindowIndex.data) {
-      index = NavigationWindowIndex.history
-      let historyPage = items[index] as HTMLLinkElement
-      historyPage.click()
-    } else if (index > NavigationWindowIndex.data) {
-      // let garbageDropPage = (items[index] as HTMLLinkElement);
-      // garbageDropPage.click();
-    } else {
     }
     var asideContent = document.querySelector(
       '.aside-content'
@@ -117,7 +108,7 @@ namespace Navigation {
   }
   let session = new SessionUser()
   ;(window as unknown as NavigationWindow).User = session
-  let index = NavigationWindowIndex.data
+  let index = NavigationWindowIndex.bikeshed
   // if (session.WUser && !session.WUser.CanCreateWeChatUser) {
   //   index = NavigationWindowIndex.task
   //   items[NavigationWindowIndex.data].style.display = 'none'
@@ -129,7 +120,7 @@ namespace Navigation {
   var query = search.split('&')
   var querys: any = {
     openid: '',
-    index: NavigationWindowIndex.data,
+    index: NavigationWindowIndex.bikeshed,
     eventid: '',
     data: '',
     r: Math.random().toFixed(6),

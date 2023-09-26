@@ -10,6 +10,7 @@ import {
   EventType,
 } from '../../../data-core/model/waste-regulation/event-number'
 import { CameraImageUrl } from '../../../data-core/model/waste-regulation/event-record'
+import { GetEventRecordsParams } from '../../../data-core/model/waste-regulation/event-record-params'
 import {
   EventTask,
   GetAvailableEventTasksParams,
@@ -20,9 +21,10 @@ import {
 import { GetGarbageStationStatisticNumbersParams } from '../../../data-core/model/waste-regulation/garbage-station-number-statistic'
 import { ResourceRole, ResourceType } from '../../../data-core/model/we-chat'
 import { Service } from '../../../data-core/repuest/service'
+import { Duration } from '../tools/datetime.tool'
 import { DataCache } from './Cache'
 import { DataController } from './DataController'
-import { OneDay, Paged, StatisticNumber } from './IController'
+import { Paged, StatisticNumber } from './IController'
 import { IDataController } from './modules/IController/IDataController'
 import { IEventTaskController } from './modules/IController/IEventTaskController'
 import { IGarbageStationController } from './modules/IController/IGarbageStationController'
@@ -96,7 +98,7 @@ export class GarbageStationController
   }
 
   getStatisticNumberListInOtherDay = async (
-    day: OneDay,
+    day: Duration,
     sources: ResourceRole[]
   ): Promise<Array<StatisticNumber>> => {
     let result = new Array<StatisticNumber>()
@@ -153,7 +155,7 @@ export class GarbageStationController
   }
 
   getStatisticNumberList = async (
-    day: OneDay
+    day: Duration
   ): Promise<Array<StatisticNumber>> => {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -222,7 +224,7 @@ export class GarbageStationController
 		}
 		return result;
 	} */
-  getHistory = async (day: OneDay) => {
+  getHistory = async (day: Duration) => {
     let datas: Array<EventNumberStatistic> = []
     let params = new PageTimeUnitParams()
     params.BeginTime = day.begin
@@ -311,20 +313,18 @@ export class GarbageStationController
   }
 
   getEventListParams(
-    day: OneDay,
+    day: Duration,
     page: Paged,
     type: EventType,
     ids?: string[]
   ) {
-    const params = {
-      BeginTime: day.begin.toISOString(),
-      EndTime: day.end.toISOString(),
-      PageSize: page.size,
-      PageIndex: page.index,
-      Desc: true,
-
-      StationIds: this.roles.map((x) => x.Id),
-    }
+    let params = new GetEventRecordsParams()
+    params.BeginTime = day.begin
+    params.EndTime = day.end
+    params.PageSize = page.size
+    params.PageIndex = page.index
+    params.Desc = true
+    params.StationIds = this.roles.map((x) => x.Id)
     if (ids) {
       params.StationIds = ids
     }
@@ -332,7 +332,7 @@ export class GarbageStationController
   }
 
   async getEventTaskList(
-    day: OneDay,
+    day: Duration,
     isHandle: boolean = false,
     isFinished: boolean = false
   ) {
@@ -393,7 +393,7 @@ export class GarbageStationController
   }
 
   async getAvailableEventTaskList(
-    day: OneDay
+    day: Duration
   ): Promise<PagedList<EventTaskViewModel>> {
     let params: GetAvailableEventTasksParams =
       new GetAvailableEventTasksParams()

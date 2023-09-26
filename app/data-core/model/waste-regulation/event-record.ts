@@ -8,6 +8,7 @@ import {
   GarbageFullEventData,
   IllegalDropEventData,
   MixedIntoEventData,
+  SmokeEventData,
 } from './event-record-data'
 
 export enum EventResourceType {
@@ -108,4 +109,8 @@ export class MixedIntoEventRecord extends EventRecordData<MixedIntoEventData> {
 export class GarbageDropEventRecord extends EventRecordData<GarbageDropEventData> {
   @Type(() => GarbageDropEventData)
   Data!: GarbageDropEventData
+}
+export class SmokeEventRecord extends EventRecordData<SmokeEventData> {
+  @Type(() => SmokeEventData)
+  Data!: SmokeEventData
 }

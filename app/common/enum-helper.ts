@@ -9,12 +9,6 @@ export enum DivisionTypeEnum {
   Village,
 }
 
-export enum StationStateEnum {
-  '正常' = 0,
-  '满溢',
-  '异常',
-}
-
 export enum ResourceRoleType {
   // 1-街道，2-居委，3-厢房
   /**县、街道 */

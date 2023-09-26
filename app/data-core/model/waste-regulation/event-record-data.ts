@@ -178,3 +178,20 @@ export class GarbageDropEventData extends EventData {
   @Type(() => GarbageDropFeedback)
   Feedbacks?: GarbageDropFeedback[]
 }
+
+export class SmokeEventData extends EventData {
+  /**	DateTime	开始时间	O */
+  @Transform(transformDateTime)
+  BeginTime?: Date
+  /**	DateTime	结束时间	O */
+  @Transform(transformDateTime)
+  EndTime?: Date
+  /**	Boolean	是否正在报警	O */
+  IsAlarming?: boolean
+  /**	CameraImageUrl[]	图片ID、图片地址列表	O */
+  CameraImageUrls?: CameraImageUrl[]
+  /**	String	网格单元ID	O */
+  GridCellId?: string
+  /**	String	网格单元名称	O */
+  GridCellName?: string
+}

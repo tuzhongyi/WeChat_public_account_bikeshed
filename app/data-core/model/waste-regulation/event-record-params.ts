@@ -1,5 +1,7 @@
+import { Transform } from 'class-transformer'
 import { OrderType } from '../../enums/order-type.enum'
 import { PagedParams } from '../page'
+import { transformDateTime } from '../transformer'
 import { CompareRange } from './compare-range.model'
 import { FeedbackResult } from './garbage-drop-feedback.model'
 import {
@@ -10,9 +12,11 @@ import {
 /**获取事件记录参数 */
 export class GetEventRecordsParams extends PagedParams {
   /**开始时间 */
-  BeginTime!: Date | string
+  @Transform(transformDateTime)
+  BeginTime!: Date
   /**结束时间 */
-  EndTime!: Date | string
+  @Transform(transformDateTime)
+  EndTime!: Date
   /**所属区划ID列表(可选) */
   DivisionIds?: string[]
   /**垃圾房ID列表(可选) */
@@ -29,8 +33,7 @@ export class GetEventRecordsParams extends PagedParams {
   Desc?: boolean
 }
 
-export interface GetGarbageDropEventRecordsParams
-  extends GetEventRecordsParams {
+export class GetGarbageDropEventRecordsParams extends GetEventRecordsParams {
   /**
    *	所属网格ID列表	O
    *
