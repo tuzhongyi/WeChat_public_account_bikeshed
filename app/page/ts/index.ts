@@ -33,7 +33,12 @@ namespace Navigation {
       index = NavigationWindowIndex.bikeshed
       let garbageDropPage = items[index] as HTMLLinkElement
       garbageDropPage.click()
+    } else if (index < NavigationWindowIndex.bikeshed) {
+      index = NavigationWindowIndex.history
+      let historyPage = items[index] as HTMLLinkElement
+      historyPage.click()
     }
+
     var asideContent = document.querySelector(
       '.aside-content'
     ) as HTMLDivElement
